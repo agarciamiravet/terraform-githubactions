@@ -49,5 +49,6 @@ jobs:
       uses: actions/github-script@v3
       with:
         script: |
-        ls
-        ls
+            // Get a list of all issues created by the PR opener
+            // See: https://octokit.github.io/rest.js/#pagination
+            ls
