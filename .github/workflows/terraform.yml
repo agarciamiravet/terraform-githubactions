@@ -40,16 +40,10 @@ jobs:
     #       terraform-versions: [0.13.6, latest]
     runs-on: ubuntu-latest
     steps:
-    - name: Detect desired Terraform version
-      id: terraform-version-check
-      run: | 
-        $terraformVersion = "0.14.9"
-        Write-Output "::set-output name=TERRAFORM_VERSION::${terraformVersion}"
-      shell: pwsh
     - name: Get Terraform
       uses: hashicorp/setup-terraform@v1
       with:
-        terraform_version: ${{ steps.terraform-version-check.outputs.TERRAFORM_VERSION }}
+        terraform_version: 0.14.9
         terraform_wrapper: false
 
     - name: Terraform Init
