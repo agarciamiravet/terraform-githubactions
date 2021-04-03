@@ -29,7 +29,6 @@ name: ci-vanilla
 
 jobs:
   terraform:
-    needs: dotnet
     name: Provision solution, test it, and tear it down again
     defaults:
       run:
