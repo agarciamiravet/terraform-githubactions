@@ -7,30 +7,83 @@ on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
     branches: [ main ]
+    paths-ignore:
+    - '**/README.md'
+    - '**/LICENSE'
+    - 'visuals/**'
   pull_request:
     branches: [ main ]
+    paths-ignore:
+    - '**/README.md'
+    - '**/LICENSE'
+    - 'visuals/**'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+env:
+  # ARM_SAS_TOKEN: ${{ secrets.ARM_SAS_TOKEN }}
+  # TF_VAR_backend_storage_container: ${{ secrets.TF_VAR_backend_storage_container }}
+  # TF_VAR_backend_storage_account: ${{ secrets.TF_VAR_backend_storage_account }}
+  # TF_VAR_backend_resource_group: ${{ secrets.TF_VAR_backend_resource_group }}
+  TF_IN_AUTOMATION: true
+  TF_WORKSPACE: ci
+
+name: ci-vanilla
+
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  terraform:
+    needs: dotnet
+    name: Provision solution, test it, and tear it down again
+    defaults:
+      run:
+        working-directory: src/terraform
+    # runs-on: ${{ matrix.os }}
+    # strategy:
+    #     matrix:
+    #       os: [windows-latest, ubuntu-latest, macos-latest]
+    #       terraform-versions: [0.13.6, latest]
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+    - name: Detect desired Terraform version
+      id: terraform-version-check
+      run: | 
+        $terraformVersion = "0.14.9"
+        Write-Output "::set-output name=TERRAFORM_VERSION::${terraformVersion}"
+      shell: pwsh
+    - name: Get Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: ${{ steps.terraform-version-check.outputs.TERRAFORM_VERSION }}
+        terraform_wrapper: false
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
+    - name: Terraform Init
+      uses: Azure/powershell@v1
+      env:
+        AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+      with:
+        inlineScript: | 
+          # Parse Azure secret into Terraform variables
+          $servicePrincipal = ($env:AZURE_CREDENTIALS | ConvertFrom-Json)
+          $env:ARM_CLIENT_ID = $servicePrincipal.clientId
+          $env:ARM_CLIENT_SECRET = $servicePrincipal.clientSecret
+          $env:ARM_SUBSCRIPTION_ID = $servicePrincipal.subscriptionId
+          $env:ARM_TENANT_ID = $servicePrincipal.tenantId
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          $env:TF_VAR_run_id=$env:GITHUB_RUN_ID
+          # We may not be able to create a Service Principal with a Service Principal, reuse Terraform SP for Logic App:
+          $env:TF_VAR_workflow_sp_application_id = $servicePrincipal.clientId
+          $env:TF_VAR_workflow_sp_application_secret = $servicePrincipal.clientSecret
+          $env:TF_VAR_workflow_sp_object_id = $servicePrincipal.objectId
+          
+          # List environment variables
+          Get-ChildItem -Path Env: -Recurse -Include ARM_*,AZURE_*,GITHUB_*,TF_* | Sort-Object -Property Name
+          # Save environment variable setup for subsequent steps
+          Get-ChildItem -Path Env: -Recurse -Include ARM_*,TF_VAR_* | ForEach-Object {Write-Output "$($_.Name)=$($_.Value)"} >> $env:GITHUB_ENV
+
+          Set-Location (Join-Path $env:GITHUB_WORKSPACE terraform) # Task does not support 'working-directory' property
+          Get-Location
+          terraform init
+        azPSVersion: latest
+        errorActionPreference: Stop
+        failOnStandardError: true
