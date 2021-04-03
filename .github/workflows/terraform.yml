@@ -51,4 +51,4 @@ jobs:
         script: |
             // Get a list of all issues created by the PR opener
             // See: https://octokit.github.io/rest.js/#pagination
-            terraform init
+            terraform --version
