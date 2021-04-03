@@ -47,11 +47,8 @@ jobs:
         terraform_wrapper: false
 
     - name: Terraform Init
-      uses: Azure/powershell@v1
+      uses: actions/github-script@v3
       with:
-        inlineScript: | 
-          Get-Location
-          terraform init
-        azPSVersion: latest
-        errorActionPreference: Stop
-        failOnStandardError: true
+        script: |
+          terraform -version
+          ls
