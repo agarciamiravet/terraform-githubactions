@@ -32,7 +32,7 @@ jobs:
     name: Provision solution, test it, and tear it down again
     defaults:
       run:
-        working-directory: src/terraform
+        working-directory: ./src/terraform
     # runs-on: ${{ matrix.os }}
     # strategy:
     #     matrix:
