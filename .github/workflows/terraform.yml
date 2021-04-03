@@ -45,10 +45,9 @@ jobs:
       with:
         terraform_version: 0.14.9
         terraform_wrapper: false
-
     - name: Terraform Init
       uses: actions/github-script@v3
       with:
         script: |
-          terraform -version
+          terraform init
           ls
