@@ -49,4 +49,5 @@ jobs:
       uses: actions/github-script@v3
       with:
         script: |
-          terraform init
+        ls
+        ls
