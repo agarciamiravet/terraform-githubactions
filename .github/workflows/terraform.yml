@@ -93,5 +93,5 @@ jobs:
       - name: OPA tests
         uses: ibiqlik/conftest-action-docker@v1
         with:
-          path: "examples/account.json"
-          policy: "policy"
+          path: "examples/public_s3.json"
+          policy: "examples/policy"
