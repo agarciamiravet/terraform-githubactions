@@ -68,16 +68,16 @@ jobs:
           ls
           echo $PWD
           
-      - name: OPA tests 2
-        uses: ibiqlik/conftest-action-docker@master
-        with:
-          path: "examples/account.json"
-          policy: "policy"
+      #- name: OPA tests 2
+      #  uses: ibiqlik/conftest-action-docker@master
+      #  with:
+      #    path: "examples/account.json"
+      #    policy: "policy"
       - name: OPA tests
         uses: ibiqlik/conftest-action-docker@master
         with:
           path: "/home/runner/work/terraform-githubactions/terraform-githubactions/src/terraform/tfplan.json"
-          policy: "/home/runner/work/terraform-githubactions/terraform-githubactions/policy"
+          policy: "policy"
 
   awsterraform:
       runs-on: ubuntu-latest
