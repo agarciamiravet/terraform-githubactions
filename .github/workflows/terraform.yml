@@ -24,31 +24,27 @@ env:
   # TF_VAR_backend_resource_group: ${{ secrets.TF_VAR_backend_resource_group }}
   TF_IN_AUTOMATION: true
   TF_WORKSPACE: ci
-
+  
 name: ci-vanilla
 
 jobs:
   terraform:
-    name: Provision solution, test it, and tear it down again
-    defaults:
-      run:
-        working-directory: ./src/terraform
-    # runs-on: ${{ matrix.os }}
-    # strategy:
-    #     matrix:
-    #       os: [windows-latest, ubuntu-latest, macos-latest]
-    #       terraform-versions: [0.13.6, latest]
     runs-on: ubuntu-latest
+
+    env:
+      ARM_CLIENT_ID: <client-id>
+      ARM_CLIENT_SECRET: ${{secrets.TF_ARM_CLIENT_SECRET}}
+      ARM_SUBSCRIPTION_ID: <subscription-id>
+      ARM_TENANT_ID: <tenant-id>
+
     steps:
-    - name: Get Terraform
-      uses: hashicorp/setup-terraform@v1
-      with:
-        terraform_version: 0.14.9
-        terraform_wrapper: false
-    - name: Terraform Init
-      uses: actions/github-script@v3
-      with:
-        script: |
-            // Get a list of all issues created by the PR opener
-            // See: https://octokit.github.io/rest.js/#pagination
-            terraform --version
+      - uses: actions/checkout@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Format
+        run: terraform fmt -check
