@@ -3,7 +3,7 @@ package main
 
 blacklist = [
   "google_iam",
-  "google_container"
+  "azurerm_app_service"
 ]
 
 deny[msg] {
