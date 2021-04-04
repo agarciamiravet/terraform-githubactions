@@ -76,7 +76,7 @@ jobs:
       - name: OPA tests
         uses: ibiqlik/conftest-action-docker@master
         with:
-          path: "/home/runner/work/terraform-githubactions/terraform-githubactions/src/terraform/tfplan.json"
+          path: "src/terraform/tfplan.json"
           policy: "policy"
 
   awsterraform:
