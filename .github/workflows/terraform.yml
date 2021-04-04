@@ -67,8 +67,9 @@ jobs:
           terraform show -json tfplan.binary > tfplan.json
           ls
           cat tfplan.json
-          
-      - name: test
-        uses: ibiqlik/conftest-action-docker@v1
+      
+      - name: OPA tests
+        uses: ibiqlik/conftest-action-docker@master
         with:
-          path: "src/terraform/tfplan.json"
+          path: "terraform/tfplan.json"
+          policy: "policy"
