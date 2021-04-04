@@ -23,7 +23,6 @@ env:
   # TF_VAR_backend_storage_account: ${{ secrets.TF_VAR_backend_storage_account }}
   # TF_VAR_backend_resource_group: ${{ secrets.TF_VAR_backend_resource_group }}
   TF_IN_AUTOMATION: true
-  TF_WORKSPACE: ci
   
 name: ci-vanilla
 
