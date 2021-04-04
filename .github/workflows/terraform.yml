@@ -67,3 +67,9 @@ jobs:
           terraform show -json tfplan.binary > tf-plan.json
           ls
           cat tf-plan.json
+          
+      - name: test
+        uses: instrumenta/conftest-action@master
+        with:
+          files: tf-plan.json
+          policy: ./test
