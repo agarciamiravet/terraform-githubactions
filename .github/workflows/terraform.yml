@@ -63,13 +63,13 @@ jobs:
         
       - name: Prep tests
         run: |
-          terraform plan -out=tfplan.binary
-          terraform show -json tfplan.binary > tf-plan.json
+          terraform plan -out tfplan.binary
+          terraform show -json tfplan.binary > tfplan.json
           ls
-          cat tf-plan.json
+          cat tfplan.json
           
       - name: test
         uses: instrumenta/conftest-action@master
         with:
-          files: ./src/terraform/tf-plan.json
+          files: ./src/terraform/tfplan.json
           policy: ./test
