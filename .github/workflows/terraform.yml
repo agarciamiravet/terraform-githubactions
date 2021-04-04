@@ -75,4 +75,4 @@ jobs:
         uses: ibiqlik/conftest-action-docker@master
         with:
           path: "/home/runner/work/terraform-githubactions/terraform-githubactions/src/terraform/tfplan.json"
-          policy: "/home/runner/work/terraform-githubactions/terraform-githubactions/src/policy"
+          policy: "/home/runner/work/terraform-githubactions/terraform-githubactions/policy"
