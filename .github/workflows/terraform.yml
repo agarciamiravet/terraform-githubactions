@@ -37,7 +37,10 @@ jobs:
       ARM_CLIENT_SECRET: ${{secrets.TF_ARM_CLIENT_SECRET}}
       ARM_SUBSCRIPTION_ID: ${{secrets.TF_ARM_SUBSCRIPTION_ID}}
       ARM_TENANT_ID: ${{secrets.TF_ARM_TENANT_ID}}
-
+      TF_APP_SERVICE_PLAN_NAME: ${{secrets.TF_APP_SERVICE_PLAN_NAME}}
+      TF_HEROESAPI_APPSVCNAME: ${{secrets.TF_HEROESAPI_APPSVCNAME}}
+      TF_HEROESWEB_APPSVCNAME: ${{secrets.TF_HEROESWEB_APPSVCNAME}}
+      TF_RESOURCE_GROUP: ${{secrets.TF_RESOURCE_GROUP}}
     steps:
       - uses: actions/checkout@v2
 
@@ -49,3 +52,6 @@ jobs:
 
       - name: Terraform Format
         run: terraform fmt
+        
+      - name: Terraform Plan
+        run: terraform plan
