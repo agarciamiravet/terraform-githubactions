@@ -71,10 +71,27 @@ jobs:
       - name: OPA tests 2
         uses: ibiqlik/conftest-action-docker@master
         with:
-          path: "./examples/account.json"
-          policy: "./policy"
+          path: "examples/account.json"
+          policy: "policy"
       - name: OPA tests
         uses: ibiqlik/conftest-action-docker@master
         with:
           path: "/home/runner/work/terraform-githubactions/terraform-githubactions/src/terraform/tfplan.json"
           policy: "/home/runner/work/terraform-githubactions/terraform-githubactions/policy"
+
+  awsterraform:
+      runs-on: ubuntu-latest
+      steps:
+      - uses: actions/checkout@master
+      ## Leaving terraform cmds as example but not run due to credential requirements
+      # - name: Terraform plan
+      #   run: |
+      #     cd examples/aws/public_s3/
+      #     terraform init
+      #     terraform plan -out public_s3.tfplan
+      #     terraform show -json public_s3.tfplan > public_s3.json
+      - name: OPA tests
+        uses: ibiqlik/conftest-action-docker@v1
+        with:
+          path: "examples/account.json"
+          policy: "policy"
