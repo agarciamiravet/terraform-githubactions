@@ -66,7 +66,7 @@ jobs:
           terraform plan -out tfplan.binary
           terraform show -json tfplan.binary > tfplan.json
           ls
-          cat tfplan.json
+          cat ./terraform/tfplan.json
           
       - name: check
         run: |
