@@ -71,5 +71,5 @@ jobs:
       - name: test
         uses: instrumenta/conftest-action@master
         with:
-          files: tf-plan.json
+          files: ./src/terraform/tf-plan.json
           policy: ./test
