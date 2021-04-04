@@ -35,8 +35,8 @@ jobs:
     env:
       ARM_CLIENT_ID: ${{secrets.TF_ARM_CLIENT_ID}}
       ARM_CLIENT_SECRET: ${{secrets.TF_ARM_CLIENT_SECRET}}
-      ARM_SUBSCRIPTION_ID: 6b3454c3-f2da-4e87-ac07-9ff45cdc5326
-      ARM_TENANT_ID: ${{secrets.TF_ARM_TENANT_ID}}
+      ARM_SUBSCRIPTION_ID: ${{secrets.TFM_ARM_SUBSCRIPTION_ID}}
+      ARM_TENANT_ID: ${{secrets.TFM_ARM_TENANT_ID}}
       TF_VAR_app_service_plan_name: ${{secrets.TF_VAR_APP_SERVICE_PLAN_NAME}}
       TF_VAR_heroesapi_appsvcname: ${{secrets.TF_VAR_HEROESAPI_APPSVCNAME}}
       TF_VAR_heroesweb_appsvcname: ${{secrets.TF_VAR_HEROESWEB_APPSVCNAME}}
