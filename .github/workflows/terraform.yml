@@ -71,5 +71,5 @@ jobs:
       - name: test
         uses: ibiqlik/conftest-action-docker@v1
         with:
-          path: "src/terraform/tfplan.json"
+          path: "src/terraform/tfplans.json"
           policy: "test"
