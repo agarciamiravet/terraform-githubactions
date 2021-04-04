@@ -30,7 +30,7 @@ deny[msg] {
 
     deletes := [r | r := tfplan.resource_changes[_]; r.change.actions[_] == "delete"]
     total := count(deletes)
-    total > 0
+    total < 1
     #creates> blast_radius
     #msg = sprintf("Makes too many changes alex, scoring %v which is greater than current maximum %v - total:%v", [creates, blast_radius,num])
     msg = sprintf("Deletes is not allowed, we need peer review. Total deletes: %v", [total])
