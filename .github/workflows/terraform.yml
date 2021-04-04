@@ -72,4 +72,4 @@ jobs:
         uses: instrumenta/conftest-action@master
         with:
           files: ./src/terraform/tfplan.json
-          policy: ./test
+          policy: ./test/terraform.rego
