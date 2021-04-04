@@ -37,15 +37,15 @@ jobs:
       ARM_CLIENT_SECRET: ${{secrets.TF_ARM_CLIENT_SECRET}}
       ARM_SUBSCRIPTION_ID: ${{secrets.TF_ARM_SUBSCRIPTION_ID}}
       ARM_TENANT_ID: ${{secrets.TF_ARM_TENANT_ID}}
-      TF_VAR_APP_SERVICE_PLAN_NAME: ${{secrets.TF_VAR_APP_SERVICE_PLAN_NAME}}
-      TF_VAR_HEROESAPI_APPSVCNAME: ${{secrets.TF_VAR_HEROESAPI_APPSVCNAME}}
-      TF_VAR_HEROESWEB_APPSVCNAME: ${{secrets.TF_VAR_HEROESWEB_APPSVCNAME}}
-      TF_VAR_RESOURCE_GROUP: ${{secrets.TF_VAR_RESOURCE_GROUP}}
-      TF_VAR_HEROESINSIGHTS: ${{secrets.TF_VAR_HEROESINSIGHTS}}
-      TF_VAR_SQL_SERVER_LOGIN: ${{secrets.TF_VAR_SQL_SERVER_LOGIN}}
-      TF_VAR_SQL_SERVER_PWD: ${{secrets.TF_VAR_SQL_SERVER_PWD}}
-      TF_VAR_SQL_SERVER_NAME: ${{secrets.TF_VAR_SQL_SERVER_NAME}}
-      TF_VAR_DATABASE_NAME: ${{secrets.TF_VAR_DATABASE_NAME}}
+      TF_VAR_app_service_plan_name: ${{secrets.TF_VAR_APP_SERVICE_PLAN_NAME}}
+      TF_VAR_heroesapi_appsvcname: ${{secrets.TF_VAR_HEROESAPI_APPSVCNAME}}
+      TF_VAR_heroesweb_appsvcname: ${{secrets.TF_VAR_HEROESWEB_APPSVCNAME}}
+      TF_VAR_resource_group: ${{secrets.TF_VAR_RESOURCE_GROUP}}
+      TF_VAR_heroesinsights: ${{secrets.TF_VAR_HEROESINSIGHTS}}
+      TF_VAR_sql_server_login: ${{secrets.TF_VAR_SQL_SERVER_LOGIN}}
+      TF_VAR_sql_server_pwd: ${{secrets.TF_VAR_SQL_SERVER_PWD}}
+      TF_VAR_sql_server_name: ${{secrets.TF_VAR_SQL_SERVER_NAME}}
+      TF_VAR_database_name: ${{secrets.TF_VAR_DATABASE_NAME}}
     steps:
       - uses: actions/checkout@v2
 
