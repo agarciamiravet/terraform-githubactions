@@ -67,7 +67,10 @@ jobs:
           terraform show -json tfplan.binary > tfplan.json
           ls
           cat tfplan.json
-      
+          
+      - name: check
+        run: |
+          ls
       - name: OPA tests
         uses: ibiqlik/conftest-action-docker@master
         with:
