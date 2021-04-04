@@ -69,7 +69,7 @@ jobs:
           cat tfplan.json
           
       - name: test
-        uses: instrumenta/conftest-action@master
+        uses: ibiqlik/conftest-action-docker@v1
         with:
-          files: ./src/terraform/tfplan.json
-          policy: ./test/terraform.rego
+          path: "src/terraform/tfplan.json"
+          policy: "test"
