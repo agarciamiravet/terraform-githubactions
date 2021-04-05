@@ -74,10 +74,16 @@ jobs:
       #    path: "examples/account.json"
       #    policy: "policy"
       - name: OPA tests
+        id: opatests
         uses: ibiqlik/conftest-action-docker@master
+        continue-on-error: true
         with:
           path: "src/terraform/tfplan.json"
           policy: "policy"
+          
+      - name: Check on failures
+        if: steps.opatests.outcome != 'success'
+        run: echo mal
 
   awsterraform:
       runs-on: ubuntu-latest
