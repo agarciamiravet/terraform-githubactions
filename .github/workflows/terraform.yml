@@ -85,7 +85,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: my-artifact
-          path: $PWD/tfplan.binary
+          path: /home/runner/work/terraform-githubactions/terraform-githubactions/src/terraform/tfplan.binary
 
       - name: Slack notification
         if: steps.opatests.outcome != 'success'
