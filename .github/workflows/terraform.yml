@@ -81,6 +81,12 @@ jobs:
           path: "src/terraform/tfplan.json"
           policy: "policy"
       
+      - name: Create artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: my-artifact
+          path: tfplan.json
+
       - name: Slack notification
         if: steps.opatests.outcome != 'success'
         uses: 8398a7/action-slack@v3
@@ -96,3 +102,19 @@ jobs:
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      
+  deploy:
+    needs: terraform
+    environment: production
+    runs-on: 'ubuntu-latest'
+    steps:
+      - uses: actions/checkout@v2
+      
+      - uses: actions/download-artifact@v2
+        with:
+          name: my-artifact
+      
+      - name: Terraform check plan
+        run: ls
+        
+
