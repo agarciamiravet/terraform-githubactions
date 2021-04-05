@@ -96,23 +96,3 @@ jobs:
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-      - name: Check on failures
-        if: steps.opatests.outcome != 'success'
-        run: echo mal
-
-  awsterraform:
-      runs-on: ubuntu-latest
-      steps:
-      - uses: actions/checkout@master
-      ## Leaving terraform cmds as example but not run due to credential requirements
-      # - name: Terraform plan
-      #   run: |
-      #     cd examples/aws/public_s3/
-      #     terraform init
-      #     terraform plan -out public_s3.tfplan
-      #     terraform show -json public_s3.tfplan > public_s3.json
-      - name: OPA tests
-        uses: ibiqlik/conftest-action-docker@v1
-        with:
-          path: "examples/public_s3.json"
-          policy: "examples/policy"
