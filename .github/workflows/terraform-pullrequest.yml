@@ -24,7 +24,7 @@ env:
   # TF_VAR_backend_resource_group: ${{ secrets.TF_VAR_backend_resource_group }}
   TF_IN_AUTOMATION: true
   
-name: ci-vanilla
+name: ci-pullrequest
 
 jobs:
   terraform:
