@@ -22,12 +22,6 @@ deny[msg] {
     msg = sprintf("Deletes is not allowed, we need peer review. Total deletes: %v", [total])
 }
 
-deny[msg] {
-  where := location_changes[_]
-  not startswith(where, "westeurope")
-  msg := sprintf("Location must be `westeurope`; found `%v`", [where])
-}
-
 ####################
 # Terraform Library
 ####################
@@ -68,9 +62,4 @@ num_modifies[resource_type] = num {
     all := resources[resource_type]
     modifies := [res |  res:= all[_]; res.change.actions[_] == "update"]
     num := count(modifies)
-}
-
-#Get location from all resources
-location_changes[c] {
- c := input.resource_changes[_].change.after.location
 }
