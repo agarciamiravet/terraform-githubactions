@@ -107,7 +107,7 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
       
   Deploy:
-    if: Build.steps.opatests.outcome != 'success'
+    if: steps.opatests.outcome == 'success'
     needs: Build
     environment: production
     runs-on: 'ubuntu-latest'
