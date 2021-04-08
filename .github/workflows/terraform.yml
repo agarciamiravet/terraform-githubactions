@@ -46,6 +46,9 @@ jobs:
       TF_VAR_sql_server_pwd: ${{secrets.TF_VAR_SQL_SERVER_PWD}}
       TF_VAR_sql_server_name: ${{secrets.TF_VAR_SQL_SERVER_NAME}}
       TF_VAR_database_name: ${{secrets.TF_VAR_DATABASE_NAME}}
+      TF_VAR_backend_storage_name: ${{secrets.TF_BACKEND_STORAGE_NAME}}
+      TF_VAR_backend_container_name: ${{secrets.TF_BACKEND_CONTAINER_NAME}}
+      TF_VAR_backend_state_name: ${{secrets.TF_BACKEND_STATE_NAME}}
     steps:
       - uses: actions/checkout@v2
 
