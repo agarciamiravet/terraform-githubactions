@@ -1,10 +1,11 @@
 terraform {
-  #backend "azurerm" {
-  #  storage_account_name = "stterraformitaa"
- #   container_name       = "tfstate"
- #   key                  = "iac-active-directory-core-stack.terraform.tfstate"
-  #}
-  backend "local" {}
+  backend "azurerm" {
+    resource_group_name  = "rg-codemotion"
+    storage_account_name = "stcodemotion"
+   container_name       = "tfstate"
+    key                  = "terraform.remote.tfstate"
+  }
+  #backend "local" {}
 
   required_providers {
     azurerm = {

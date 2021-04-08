@@ -24,10 +24,10 @@ env:
   # TF_VAR_backend_resource_group: ${{ secrets.TF_VAR_backend_resource_group }}
   TF_IN_AUTOMATION: true
   
-name: ci-vanilla
+name: terraform-deploy
 
 jobs:
-  terraform:
+  Build:
     runs-on: ubuntu-latest
     defaults:
         run:
@@ -46,6 +46,9 @@ jobs:
       TF_VAR_sql_server_pwd: ${{secrets.TF_VAR_SQL_SERVER_PWD}}
       TF_VAR_sql_server_name: ${{secrets.TF_VAR_SQL_SERVER_NAME}}
       TF_VAR_database_name: ${{secrets.TF_VAR_DATABASE_NAME}}
+      TF_VAR_backend_storage_name: ${{secrets.TF_BACKEND_STORAGE_NAME}}
+      TF_VAR_backend_container_name: ${{secrets.TF_BACKEND_CONTAINER_NAME}}
+      TF_VAR_backend_state_name: ${{secrets.TF_BACKEND_STATE_NAME}}
     steps:
       - uses: actions/checkout@v2
 
@@ -103,18 +106,37 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
       
-  deploy:
-    needs: terraform
+  Deploy:
+    if: steps.opatests.outcome == 'success'
+    needs: Build
     environment: production
     runs-on: 'ubuntu-latest'
+    defaults:
+        run:
+          working-directory: ./src/terraform
+    env:
+      ARM_CLIENT_ID: ${{secrets.TF_ARM_CLIENT_ID}}
+      ARM_CLIENT_SECRET: ${{secrets.TF_ARM_CLIENT_SECRET}}
+      ARM_SUBSCRIPTION_ID: ${{secrets.TFM_ARM_SUBSCRIPTION_ID}}
+      ARM_TENANT_ID: ${{secrets.TFM_ARM_TENANT_ID}}
     steps:
       - uses: actions/checkout@v2
+      
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
       
       - uses: actions/download-artifact@v2
         with:
           name: my-artifact
-      
-      - name: Terraform check plan
+          path: ./src/terraform
+          
+      - name: check files
         run: ls
+        
+      - name: Terraform init
+        run: terraform init
+      
+      - name: Terraform apply plan
+        run: terraform apply --auto-approve tfplan.binary
         
 
