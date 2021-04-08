@@ -59,8 +59,12 @@ jobs:
         
       - name: Preparation tests
         run: |
-          terraform plan -out tfplan.binary
-          terraform show -json tfplan.binary > tfplan.json
+          #terraform plan -out tfplan.binary
+          #terraform show -json tfplan.binary > tfplan.json
+          
+          terraform plan -out tfplan.tfplan
+          terraform show -json tfplan.tfplan > tfplan.json
+    
           ls
           cat tfplan.json
           
@@ -80,14 +84,14 @@ jobs:
         uses: agarciamiravet/confest-alex-github-action@main
         continue-on-error: true
         with:
-          path: "test/tfplan.json"
+          path: "src/terraform/tfplan.json"
           policy: "policy"
       
       - name: Create artifact
         uses: actions/upload-artifact@v2
         with:
           name: my-artifact
-          path: ${{ github.workspace }}/src/terraform/tfplan.binary
+          path: ${{ github.workspace }}/src/terraform/tfplan.tfplan
 
       - name: Slack notification
         if: steps.opatests.outcome != 'success'
@@ -139,6 +143,6 @@ jobs:
         run: terraform init
       
       - name: Terraform apply plan
-        run: terraform apply --auto-approve tfplan.binary
+        run: terraform apply --auto-approve tfplan.tfplan
         
 
