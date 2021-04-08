@@ -17,13 +17,6 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-env:
-  # ARM_SAS_TOKEN: ${{ secrets.ARM_SAS_TOKEN }}
-  # TF_VAR_backend_storage_container: ${{ secrets.TF_VAR_backend_storage_container }}
-  # TF_VAR_backend_storage_account: ${{ secrets.TF_VAR_backend_storage_account }}
-  # TF_VAR_backend_resource_group: ${{ secrets.TF_VAR_backend_resource_group }}
-  TF_IN_AUTOMATION: true
-  
 name: terraform-deploy
 
 jobs:
@@ -68,14 +61,7 @@ jobs:
         run: |
           terraform plan -out tfplan.binary
           terraform show -json tfplan.binary > tfplan.json
-          ls
-          echo $PWD
-          
-      #- name: OPA tests 2
-      #  uses: ibiqlik/conftest-action-docker@master
-      #  with:
-      #    path: "examples/account.json"
-      #    policy: "policy"
+
       - name: OPA tests
         id: opatests
         uses: ibiqlik/conftest-action-docker@master

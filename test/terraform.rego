@@ -9,64 +9,23 @@ import input as tfplan
 # acceptable score for automated authorization
 blast_radius = 0
 
-# weights assigned for each operation on each resource-type
-weights = {
-    "azurerm_kubernetes_cluster": {"delete": 100, "create": 20, "modify": 1},
-    "azuread_application": {"delete": 10, "create": 1, "modify": 1}
-}
-
-# Consider exactly these resource types in calculations
-resource_types = {"azurerm_kubernetes_cluster", "azuread_application","azurerm_virtual_machine"}
-
 #########
 # Policy
 #########
 
-# Authorization holds if score for the plan is acceptable and no changes are made to IAM
+# Authorization holds if score for the plan is acceptable, deletes is denied
 deny[msg] {
-    #all := resources[_]
-    #creations := [res:= all[_]; res.change.actions[_] == "create"]
-    #number := count(creations)
 
     deletes := [r | r := tfplan.resource_changes[_]; r.change.actions[_] == "delete"]
     total := count(deletes)
     total > 0
-    #creates> blast_radius
-    #msg = sprintf("Makes too many changes alex, scoring %v which is greater than current maximum %v - total:%v", [creates, blast_radius,num])
     msg = sprintf("Deletes is not allowed, we need peer review. Total deletes: %v", [total])
 }
 
-# Compute the score for a Terraform plan as the weighted sum of deletions, creations, modifications
-score = s {
-    all := [ x |
-            some resource_type
-            crud := weights[resource_type];
-            del := crud["delete"] * num_deletes[resource_type];
-            new := crud["create"] * num_creates[resource_type];
-            mod := crud["modify"] * num_modifies[resource_type];
-            x := del + new + mod
-    ]
-    s := sum(all)
-}
-
-creates = s {
-    all := [ x |
-            some resource_type
-            new :=  num_creates[resource_type];
-            x := new
-    ]
-    s := sum(all)
-}
-
-
-
-creates2 = s {
-    all := [ x |
-            some resource_type
-            new :=  num_creates[resource_type];
-            x := new
-    ]
-    s := sum(all)
+deny[msg] {
+  where := location_changes[_]
+  not startswith(where, "westeurope")
+  msg := sprintf("Location must be `westeurope`; found `%v`", [where])
 }
 
 ####################
@@ -109,4 +68,9 @@ num_modifies[resource_type] = num {
     all := resources[resource_type]
     modifies := [res |  res:= all[_]; res.change.actions[_] == "update"]
     num := count(modifies)
+}
+
+#Get location from all resources
+location_changes[c] {
+ c := input.resource_changes[_].change.after.location
 }
