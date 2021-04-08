@@ -61,7 +61,10 @@ jobs:
         run: |
           terraform plan -out tfplan.binary
           terraform show -json tfplan.binary > tfplan.json
+          ls
           cat tfplan.json
+          
+          mv tfplan.json ${{ github.workspace }}/src/terraform/tfplan.json
 
       - name: test
         uses: instrumenta/conftest-action@master
