@@ -77,7 +77,7 @@ jobs:
           
       - name: OPA tests
         id: opatests
-        uses: ibiqlik/conftest-action-docker@master
+        uses: agarciamiravet/conftest-action-docker@master
         continue-on-error: true
         with:
           path: "policy/tfplan.json"
