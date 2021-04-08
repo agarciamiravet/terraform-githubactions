@@ -29,3 +29,13 @@ variable "sql_server_name" {
 variable "database_name" {
   description = "database name"
 }
+variable "backend_storage_name" { 
+  description = "storage name"
+  }
+variable "backend_container_name" {
+  description = "container name"
+  }
+variable "backend_state_name" {
+  description = "state name"
+  }
+
