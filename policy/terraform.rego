@@ -24,13 +24,11 @@ resource_types = {"azurerm_kubernetes_cluster", "azuread_application","azurerm_v
 
 # Authorization holds if score for the plan is acceptable and no changes are made to IAM
 deny[msg] {
-    #all := resources[_]
-    #creations := [res:= all[_]; res.change.actions[_] == "create"]
-    #number := count(creations)
 
     deletes := [r | r := tfplan.resource_changes[_]; r.change.actions[_] == "delete"]
+    
     total := count(deletes)
-    total < 0
+    total > blast_radius
     msg = sprintf("Deletes is not allowed, we need peer review. Total deletes: %v", [total])
 }
 
@@ -43,26 +41,6 @@ score = s {
             new := crud["create"] * num_creates[resource_type];
             mod := crud["modify"] * num_modifies[resource_type];
             x := del + new + mod
-    ]
-    s := sum(all)
-}
-
-creates = s {
-    all := [ x |
-            some resource_type
-            new :=  num_creates[resource_type];
-            x := new
-    ]
-    s := sum(all)
-}
-
-
-
-creates2 = s {
-    all := [ x |
-            some resource_type
-            new :=  num_creates[resource_type];
-            x := new
     ]
     s := sum(all)
 }
