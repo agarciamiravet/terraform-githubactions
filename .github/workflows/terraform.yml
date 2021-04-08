@@ -63,6 +63,12 @@ jobs:
           terraform show -json tfplan.binary > tfplan.json
           cat tfplan.json
 
+      - name: test
+        uses: instrumenta/conftest-action@master
+        with:
+          files: tfplan.json"
+          policy: "${{ github.workspace }}/src/policy"
+      
       - name: OPA tests
         id: opatests
         uses: ibiqlik/conftest-action-docker@master
