@@ -69,7 +69,7 @@ jobs:
         uses: ibiqlik/conftest-action-docker@master
         continue-on-error: true
         with:
-          path: "src/test/tfplan.json"
+          path: "test/tfplan.json"
           policy: "policy"
       
       - name: Create artifact
