@@ -80,7 +80,7 @@ jobs:
         uses: agarciamiravet/confest-alex-github-action@main
         continue-on-error: true
         with:
-          path: "src/terraform/tfplan.json"
+          path: "test/tfplan.json"
           policy: "policy"
       
       - name: Create artifact
