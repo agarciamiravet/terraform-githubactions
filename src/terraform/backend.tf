@@ -1,10 +1,10 @@
 terraform {
-  #backend "azurerm" {
-  #  storage_account_name = "stterraformitaa"
- #   container_name       = "tfstate"
- #   key                  = "iac-active-directory-core-stack.terraform.tfstate"
-  #}
-  backend "local" {}
+  backend "azurerm" {
+    storage_account_name = var.backend_storage_name
+   container_name       = var.backend_container_name
+    key                  = var.backend_state_name
+  }
+  #backend "local" {}
 
   required_providers {
     azurerm = {
