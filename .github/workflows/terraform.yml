@@ -64,18 +64,12 @@ jobs:
           ls
           cat tfplan.json
           
-      - name: test
-        uses: instrumenta/conftest-action@master
-        with:
-          files:  "src/terraform/tfplan.json"
-          policy: "${{ github.workspace }}/src/policy"
-      
       - name: OPA tests
         id: opatests
         uses: ibiqlik/conftest-action-docker@master
         continue-on-error: true
         with:
-          path: "src/terraform/tfplan.json"
+          path: "src/test/tfplan.json"
           policy: "policy"
       
       - name: Create artifact
