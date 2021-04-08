@@ -1,5 +1,6 @@
 terraform {
   backend "azurerm" {
+    resource_group_name  = "rg-codemotion"
     storage_account_name = "stcodemotion"
    container_name       = "tfstate"
     key                  = "terraform.remote.tfstate"
