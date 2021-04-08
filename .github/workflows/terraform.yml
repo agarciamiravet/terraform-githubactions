@@ -64,12 +64,23 @@ jobs:
           ls
           cat tfplan.json
           
+      - name: Create artifact json plan
+        uses: actions/upload-artifact@v2
+        with:
+          name: terraform-plan-artifact
+          path: ${{ github.workspace }}/src/terraform/tfplan.json
+          
+      - uses: actions/download-artifact@v2
+        with:
+          name: terraform-plan-artifact
+          path: ./policy
+          
       - name: OPA tests
         id: opatests
         uses: ibiqlik/conftest-action-docker@master
         continue-on-error: true
         with:
-          path: "test/tfplan.json"
+          path: "policy/tfplan.json"
           policy: "policy"
       
       - name: Create artifact
