@@ -30,7 +30,7 @@ deny[msg] {
 
     deletes := [r | r := tfplan.resource_changes[_]; r.change.actions[_] == "delete"]
     total := count(deletes)
-    total > 0
+    total < 0
     msg = sprintf("Deletes is not allowed, we need peer review. Total deletes: %v", [total])
 }
 
