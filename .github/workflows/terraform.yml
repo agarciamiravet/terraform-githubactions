@@ -57,7 +57,7 @@ jobs:
       - name: Terraform Plan
         run: terraform plan 
         
-      - name: Prep tests
+      - name: Preparation tests
         run: |
           terraform plan -out tfplan.binary
           terraform show -json tfplan.binary > tfplan.json
@@ -86,14 +86,17 @@ jobs:
             {
               attachments: [{
                 color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
-                text: `${process.env.AS_WORKFLOW}\n${process.env.AS_JOB} (${process.env.AS_COMMIT}) of ${process.env.AS_REPO}@${process.env.AS_REF} by ${process.env.AS_AUTHOR} ${{ job.status }} in ${process.env.AS_TOOK}`,
+                text: `Terraform plan has deletes. ${process.env.AS_WORKFLOW}\n${process.env.AS_JOB} (${process.env.AS_COMMIT}) of ${process.env.AS_REPO}@${process.env.AS_REF} by ${process.env.AS_AUTHOR} ${{ job.status }} in ${process.env.AS_TOOK}`,
               }]
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: Slack notification
+        if: steps.opatests.outcome != 'success'
+        run: exit 1
       
   Deploy:
-    if: steps.opatests.outcome == 'success'
     needs: Build
     environment: production
     runs-on: 'ubuntu-latest'
