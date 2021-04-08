@@ -117,7 +117,7 @@ jobs:
         with:
           name: my-artifact
       
-      - name: Terraform check plan
-        run: ls
+      - name: Terraform apply plan
+        run: terraform apply --auto-approve tfplan.binary
         
 
