@@ -61,26 +61,9 @@ jobs:
         
       - name: Preparation tests
         run: |
-          #terraform plan -out tfplan.binary
-          #terraform show -json tfplan.binary > tfplan.json
-          
           terraform plan -out tfplan.tfplan
           terraform show -json tfplan.tfplan > tfplan.json
-    
-          ls
-          cat tfplan.json
-          
-      - name: Create artifact json plan
-        uses: actions/upload-artifact@v2
-        with:
-          name: terraform-plan-artifact
-          path: ${{ github.workspace }}/src/terraform/tfplan.json
-          
-      - uses: actions/download-artifact@v2
-        with:
-          name: terraform-plan-artifact
-          path: ./policy
-          
+
       - name: OPA tests
         id: opatests
         uses: agarciamiravet/confest-alex-github-action@main
@@ -89,12 +72,6 @@ jobs:
           path: "src/terraform/tfplan.json"
           policy: "policy"
       
-      - name: Create artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: my-artifact
-          path: ${{ github.workspace }}/src/terraform/tfplan.tfplan
-
       - name: Slack notification
         if: steps.opatests.outcome != 'success'
         uses: 8398a7/action-slack@v3
@@ -111,9 +88,16 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
-      - name: Tests break build
-        if: steps.opatests.outcome != 'success'
-        run: exit 1
+      #- name: Tests break build
+      #  if: steps.opatests.outcome != 'success'
+      #  run: exit 1
+      
+      - name: Create artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: my-artifact
+          path: ${{ github.workspace }}/src/terraform/tfplan.tfplan
+
       
   Deploy:
     needs: Build
@@ -137,14 +121,10 @@ jobs:
         with:
           name: my-artifact
           path: ./src/terraform
-          
-      - name: check files
-        run: ls
-        
+
       - name: Terraform init
         run: terraform init
       
       - name: Terraform apply plan
         run: terraform apply --auto-approve tfplan.tfplan
         
-
