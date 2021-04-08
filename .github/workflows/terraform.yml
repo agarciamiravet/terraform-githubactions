@@ -64,12 +64,10 @@ jobs:
           ls
           cat tfplan.json
           
-          mv tfplan.json ${{ github.workspace }}/src/terraform/tfplan.json
-
       - name: test
         uses: instrumenta/conftest-action@master
         with:
-          files:  "${{ github.workspace }}/src/terraform/tfplan.json"
+          files:  "/home/runner/work/terraform-githubactions/terraform-githubactions/src/terraform/tfplan.json"
           policy: "${{ github.workspace }}/src/policy"
       
       - name: OPA tests
