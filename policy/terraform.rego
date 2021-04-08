@@ -9,17 +9,62 @@ import input as tfplan
 # acceptable score for automated authorization
 blast_radius = 0
 
+# weights assigned for each operation on each resource-type
+weights = {
+    "azurerm_kubernetes_cluster": {"delete": 100, "create": 20, "modify": 1},
+    "azuread_application": {"delete": 10, "create": 1, "modify": 1}
+}
+
+# Consider exactly these resource types in calculations
+resource_types = {"azurerm_kubernetes_cluster", "azuread_application","azurerm_virtual_machine"}
+
 #########
 # Policy
 #########
 
-# Authorization holds if score for the plan is acceptable, deletes is denied
+# Authorization holds if score for the plan is acceptable and no changes are made to IAM
 deny[msg] {
+    #all := resources[_]
+    #creations := [res:= all[_]; res.change.actions[_] == "create"]
+    #number := count(creations)
 
     deletes := [r | r := tfplan.resource_changes[_]; r.change.actions[_] == "delete"]
     total := count(deletes)
     total > 0
     msg = sprintf("Deletes is not allowed, we need peer review. Total deletes: %v", [total])
+}
+
+# Compute the score for a Terraform plan as the weighted sum of deletions, creations, modifications
+score = s {
+    all := [ x |
+            some resource_type
+            crud := weights[resource_type];
+            del := crud["delete"] * num_deletes[resource_type];
+            new := crud["create"] * num_creates[resource_type];
+            mod := crud["modify"] * num_modifies[resource_type];
+            x := del + new + mod
+    ]
+    s := sum(all)
+}
+
+creates = s {
+    all := [ x |
+            some resource_type
+            new :=  num_creates[resource_type];
+            x := new
+    ]
+    s := sum(all)
+}
+
+
+
+creates2 = s {
+    all := [ x |
+            some resource_type
+            new :=  num_creates[resource_type];
+            x := new
+    ]
+    s := sum(all)
 }
 
 ####################
