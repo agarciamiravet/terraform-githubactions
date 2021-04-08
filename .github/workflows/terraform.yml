@@ -27,7 +27,7 @@ env:
 name: ci-vanilla
 
 jobs:
-  terraform:
+  Build:
     runs-on: ubuntu-latest
     defaults:
         run:
@@ -103,8 +103,8 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
       
-  deploy:
-    needs: terraform
+  Deploy:
+    needs: Build
     environment: production
     runs-on: 'ubuntu-latest'
     steps:
