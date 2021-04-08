@@ -110,6 +110,9 @@ jobs:
     needs: Build
     environment: production
     runs-on: 'ubuntu-latest'
+    defaults:
+        run:
+          working-directory: ./src/terraform
     env:
       ARM_CLIENT_ID: ${{secrets.TF_ARM_CLIENT_ID}}
       ARM_CLIENT_SECRET: ${{secrets.TF_ARM_CLIENT_SECRET}}
