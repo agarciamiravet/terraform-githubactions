@@ -92,7 +92,7 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
-      - name: Slack notification
+      - name: Tests break build
         if: steps.opatests.outcome != 'success'
         run: exit 1
       
