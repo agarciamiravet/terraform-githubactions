@@ -1,8 +1,8 @@
 terraform {
   backend "azurerm" {
-    storage_account_name = var.backend_storage_name
-   container_name       = var.backend_container_name
-    key                  = var.backend_state_name
+    storage_account_name = "stcodemotion"
+   container_name       = "tfstate"
+    key                  = "terraform.remote.tfstate"
   }
   #backend "local" {}
 
