@@ -38,6 +38,7 @@ resource "azurerm_app_service" "heroesapi" {
   app_settings = {
     "APPINSIGHTS_INSTRUMENTATIONKEY" = azurerm_application_insights.heroesappinsights.instrumentation_key
     "ApplicationInsights:InstrumentationKey" = azurerm_application_insights.heroesappinsights.instrumentation_key
+    "Cors__0" = "https://heroesweb.azurewebsites.net"
   }
 }
 
@@ -58,6 +59,28 @@ resource "azurerm_app_service_slot" "heroesapislot" {
   app_settings = {
     "APPINSIGHTS_INSTRUMENTATIONKEY" = azurerm_application_insights.heroesappinsights.instrumentation_key
     "ApplicationInsights:InstrumentationKey" = azurerm_application_insights.heroesappinsights.instrumentation_key
+    "Cors__0" = "https://heroesweb.azurewebsites.net"
+  }
+}
+
+resource "azurerm_app_service_slot" "heroesapislotperf" {
+  name                = "performance"
+  app_service_name    = azurerm_app_service.heroesapi.name
+  location            = azurerm_resource_group.zerorg.location
+  resource_group_name = azurerm_resource_group.zerorg.name
+  app_service_plan_id = azurerm_app_service_plan.zerosp.id
+
+  site_config {
+    always_on                = true
+    dotnet_framework_version = "v4.0"
+    websockets_enabled       = true
+    managed_pipeline_mode    = "Integrated"
+  }
+
+  app_settings = {
+    "APPINSIGHTS_INSTRUMENTATIONKEY" = azurerm_application_insights.heroesappinsights.instrumentation_key
+    "ApplicationInsights:InstrumentationKey" = azurerm_application_insights.heroesappinsights.instrumentation_key
+    "Cors__0" = "https://heroesweb.azurewebsites.net"
   }
 }
 
