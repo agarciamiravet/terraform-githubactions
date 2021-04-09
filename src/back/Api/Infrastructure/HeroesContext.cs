@@ -7,6 +7,6 @@ namespace Api.Infrastructure
     {
         public HeroesContext(DbContextOptions<HeroesContext> options) : base(options) { }
 
-        public DbSet<Hero> Heroes { get; set; }
+        public DbSet<Hero> Heroes { get; set; } //collection
     }
 }

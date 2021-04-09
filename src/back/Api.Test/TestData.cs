@@ -35,7 +35,7 @@ namespace Api.Test
                     Default=true,
                     Likes=7
                 },
-                new Hero ()
+                new Hero () //Hulk
                 {
                     Name="Hulk",
                     AlterEgo="Bruce Banner",
@@ -48,3 +48,5 @@ namespace Api.Test
         }
     }
 }
+
+

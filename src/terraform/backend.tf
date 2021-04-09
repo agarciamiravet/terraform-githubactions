@@ -1,11 +1,11 @@
 terraform {
   backend "azurerm" {
-    resource_group_name  = "rg-codemotion"
-    storage_account_name = "stcodemotion"
-   container_name       = "tfstate"
+    resource_group_name  = "CodemotionTerraformStorage"
+    storage_account_name = "stterraformitaaserg"
+    container_name       = "tfstate"
     key                  = "terraform.remote.tfstate"
   }
-  #backend "local" {}
+  // backend "local" {}
 
   required_providers {
     azurerm = {
